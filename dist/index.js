@@ -42,13 +42,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var billy_core_1 = require("@fivethree/billy-core");
-var ExamplePlugin = /** @class */ (function () {
-    function ExamplePlugin() {
+var fs_1 = require("fs");
+var path = require('path');
+var prompt = require('inquirer').prompt;
+var util = require('util');
+var exec = util.promisify(require('child_process').exec);
+var CorePlugin = /** @class */ (function () {
+    function CorePlugin() {
     }
-    ExamplePlugin.prototype.print = function (text) {
+    CorePlugin.prototype.print = function (text) {
         console.log(text);
     };
-    ExamplePlugin.prototype.timeout = function (dur) {
+    CorePlugin.prototype.wait = function (dur) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 console.log("wait for " + dur + "ms!");
@@ -61,7 +66,7 @@ var ExamplePlugin = /** @class */ (function () {
             });
         });
     };
-    ExamplePlugin.prototype.lane = function (app) {
+    CorePlugin.prototype.run = function (app) {
         var lanes = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             lanes[_i - 1] = arguments[_i];
@@ -77,18 +82,87 @@ var ExamplePlugin = /** @class */ (function () {
             });
         });
     };
+    CorePlugin.prototype.parseJSON = function (pathToJSON) {
+        if (fs_1.existsSync(pathToJSON)) {
+            return JSON.parse(fs_1.readFileSync(pathToJSON, 'utf8'));
+        }
+        else {
+            throw new Error("Couldn't find file at path: " + pathToJSON + ".");
+        }
+    };
+    CorePlugin.prototype.write = function (path, content) {
+        if (fs_1.existsSync(path)) {
+            return fs_1.writeFileSync(path, JSON.stringify(content, null, 4));
+        }
+        else {
+            throw new Error("File already exists: " + path + ".");
+        }
+    };
+    CorePlugin.prototype.prompt = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(typeof args === 'string')) return [3 /*break*/, 2];
+                        return [4 /*yield*/, prompt([
+                                {
+                                    name: 'answer',
+                                    message: args,
+                                }
+                            ])];
+                    case 1: return [2 /*return*/, (_a.sent()).answer];
+                    case 2: return [4 /*yield*/, prompt.apply(void 0, args)];
+                    case 3: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    CorePlugin.prototype.exists = function (path) {
+        return fs_1.existsSync(path);
+    };
+    CorePlugin.prototype.exec = function (command) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, exec(command)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    CorePlugin.prototype.isBilly = function () {
+        return fs_1.existsSync('./node_modules/@fivethree/billy-core');
+    };
     __decorate([
         billy_core_1.Action('print')
-    ], ExamplePlugin.prototype, "print", null);
+    ], CorePlugin.prototype, "print", null);
     __decorate([
-        billy_core_1.Action('timeout')
-    ], ExamplePlugin.prototype, "timeout", null);
+        billy_core_1.Action('wait')
+    ], CorePlugin.prototype, "wait", null);
     __decorate([
-        billy_core_1.Action('lane')
-    ], ExamplePlugin.prototype, "lane", null);
-    ExamplePlugin = __decorate([
-        billy_core_1.Plugin('billy-plugin-example')
-    ], ExamplePlugin);
-    return ExamplePlugin;
+        billy_core_1.Action('run')
+    ], CorePlugin.prototype, "run", null);
+    __decorate([
+        billy_core_1.Action('parseJSON')
+    ], CorePlugin.prototype, "parseJSON", null);
+    __decorate([
+        billy_core_1.Action('writeJSON')
+    ], CorePlugin.prototype, "write", null);
+    __decorate([
+        billy_core_1.Action('prompt')
+    ], CorePlugin.prototype, "prompt", null);
+    __decorate([
+        billy_core_1.Action('exists')
+    ], CorePlugin.prototype, "exists", null);
+    __decorate([
+        billy_core_1.Action('exec')
+    ], CorePlugin.prototype, "exec", null);
+    __decorate([
+        billy_core_1.Action('isBilly')
+    ], CorePlugin.prototype, "isBilly", null);
+    CorePlugin = __decorate([
+        billy_core_1.Plugin('billy-plugin-core')
+    ], CorePlugin);
+    return CorePlugin;
 }());
-exports.default = new ExamplePlugin();
+exports.default = new CorePlugin();
