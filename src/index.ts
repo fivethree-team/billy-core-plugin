@@ -5,7 +5,7 @@ const { prompt } = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 @Plugin('billy-plugin-core')
-class CorePlugin {
+export default class CorePlugin {
 
     @Action('print')
     print(text: string) {
@@ -42,7 +42,7 @@ class CorePlugin {
         if (existsSync(path)) {
             return writeFileSync(path, JSON.stringify(content, null, 4));
         } else {
-            throw new Error(`File already exists: ${path}.`);
+            throw new Error(`File doesn't exists: ${path}.`);
         }
     }
 
@@ -75,6 +75,11 @@ class CorePlugin {
         return existsSync('./node_modules/@fivethree/billy-core');
     }
 
-}
+    @Action('gitClean')
+    async gitClean(path?) {
+        const status = path ? await exec(`cd ${path} && git status --porcelain `) : await exec('git status --porcelain ');
+        return status.stdout.length === 0 && status.stderr.length === 0;
 
-export default new CorePlugin();
+    }
+
+}

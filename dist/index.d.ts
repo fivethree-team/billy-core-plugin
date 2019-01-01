@@ -1,5 +1,5 @@
 import { LaneType, Application } from '@fivethree/billy-core';
-declare class CorePlugin {
+export default class CorePlugin {
     print(text: string): void;
     wait(dur: number): Promise<{}>;
     run(app: Application, ...lanes: LaneType[]): Promise<void>;
@@ -9,6 +9,5 @@ declare class CorePlugin {
     exists(path: string): boolean;
     exec(command: string): Promise<any>;
     isBilly(): boolean;
+    gitClean(path?: any): Promise<boolean>;
 }
-declare const _default: CorePlugin;
-export default _default;

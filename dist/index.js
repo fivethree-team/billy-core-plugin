@@ -95,7 +95,7 @@ var CorePlugin = /** @class */ (function () {
             return fs_1.writeFileSync(path, JSON.stringify(content, null, 4));
         }
         else {
-            throw new Error("File already exists: " + path + ".");
+            throw new Error("File doesn't exists: " + path + ".");
         }
     };
     CorePlugin.prototype.prompt = function (args) {
@@ -133,6 +133,28 @@ var CorePlugin = /** @class */ (function () {
     CorePlugin.prototype.isBilly = function () {
         return fs_1.existsSync('./node_modules/@fivethree/billy-core');
     };
+    CorePlugin.prototype.gitClean = function (path) {
+        return __awaiter(this, void 0, void 0, function () {
+            var status, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!path) return [3 /*break*/, 2];
+                        return [4 /*yield*/, exec("cd " + path + " && git status --porcelain ")];
+                    case 1:
+                        _a = _b.sent();
+                        return [3 /*break*/, 4];
+                    case 2: return [4 /*yield*/, exec('git status --porcelain ')];
+                    case 3:
+                        _a = _b.sent();
+                        _b.label = 4;
+                    case 4:
+                        status = _a;
+                        return [2 /*return*/, status.stdout.length === 0 && status.stderr.length === 0];
+                }
+            });
+        });
+    };
     __decorate([
         billy_core_1.Action('print')
     ], CorePlugin.prototype, "print", null);
@@ -160,9 +182,12 @@ var CorePlugin = /** @class */ (function () {
     __decorate([
         billy_core_1.Action('isBilly')
     ], CorePlugin.prototype, "isBilly", null);
+    __decorate([
+        billy_core_1.Action('gitClean')
+    ], CorePlugin.prototype, "gitClean", null);
     CorePlugin = __decorate([
         billy_core_1.Plugin('billy-plugin-core')
     ], CorePlugin);
     return CorePlugin;
 }());
-exports.default = new CorePlugin();
+exports.default = CorePlugin;
