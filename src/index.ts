@@ -71,15 +71,30 @@ export default class CorePlugin {
     }
 
     @Action('isBilly')
-    isBilly() {
+    isBilly(): boolean {
         return existsSync('./node_modules/@fivethree/billy-core');
     }
 
     @Action('gitClean')
-    async gitClean(path?) {
+    async gitClean(path?: string): Promise<boolean> {
         const status = path ? await exec(`cd ${path} && git status --porcelain `) : await exec('git status --porcelain ');
         return status.stdout.length === 0 && status.stderr.length === 0;
+    }
 
+    @Action('bump')
+    async commitVersionBump(version: string, message: string, path?: string) {
+        let m = `bump(${version})`;
+        m = message ? m + ': ' + message : m;
+        return path ? await exec(`git add ${path} -A && git commit ${path} -m "${m}"`) : await exec(`git add -A && git commit -m "${m}"`);
+    }
+
+    @Action('push_to_remote')
+    async pushToGitRemote(path?: string, remote?: string, localBranch?: string, remoteBranch?: string) {
+        const r = remote || 'origin';
+        const curB = (await exec("git rev-parse --symbolic-full-name --abbrev-ref HEAD")).stdout.replace('\n', '');
+        const lB = localBranch || curB;
+        const rB = remoteBranch || lB;
+        return path ? await exec(`git push ${path} ${r} "${lB}:${rB}"`) : await exec(`git push ${r} "${lB}:${rB}"`);
     }
 
 }

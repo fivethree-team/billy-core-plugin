@@ -9,5 +9,7 @@ export default class CorePlugin {
     exists(path: string): boolean;
     exec(command: string): Promise<any>;
     isBilly(): boolean;
-    gitClean(path?: any): Promise<boolean>;
+    gitClean(path?: string): Promise<boolean>;
+    commitVersionBump(version: string, message: string, path?: string): Promise<any>;
+    pushToGitRemote(path?: string, remote?: string, localBranch?: string, remoteBranch?: string): Promise<any>;
 }

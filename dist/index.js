@@ -155,6 +155,54 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
+    CorePlugin.prototype.commitVersionBump = function (version, message, path) {
+        return __awaiter(this, void 0, void 0, function () {
+            var m, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        m = "bump(" + version + ")";
+                        m = message ? m + ': ' + message : m;
+                        if (!path) return [3 /*break*/, 2];
+                        return [4 /*yield*/, exec("git add " + path + " -A && git commit " + path + " -m \"" + m + "\"")];
+                    case 1:
+                        _a = _b.sent();
+                        return [3 /*break*/, 4];
+                    case 2: return [4 /*yield*/, exec("git add -A && git commit -m \"" + m + "\"")];
+                    case 3:
+                        _a = _b.sent();
+                        _b.label = 4;
+                    case 4: return [2 /*return*/, _a];
+                }
+            });
+        });
+    };
+    CorePlugin.prototype.pushToGitRemote = function (path, remote, localBranch, remoteBranch) {
+        return __awaiter(this, void 0, void 0, function () {
+            var r, curB, lB, rB, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        r = remote || 'origin';
+                        return [4 /*yield*/, exec("git rev-parse --symbolic-full-name --abbrev-ref HEAD")];
+                    case 1:
+                        curB = (_b.sent()).stdout.replace('\n', '');
+                        lB = localBranch || curB;
+                        rB = remoteBranch || lB;
+                        if (!path) return [3 /*break*/, 3];
+                        return [4 /*yield*/, exec("git push " + path + " " + r + " \"" + lB + ":" + rB + "\"")];
+                    case 2:
+                        _a = _b.sent();
+                        return [3 /*break*/, 5];
+                    case 3: return [4 /*yield*/, exec("git push " + r + " \"" + lB + ":" + rB + "\"")];
+                    case 4:
+                        _a = _b.sent();
+                        _b.label = 5;
+                    case 5: return [2 /*return*/, _a];
+                }
+            });
+        });
+    };
     __decorate([
         billy_core_1.Action('print')
     ], CorePlugin.prototype, "print", null);
@@ -185,6 +233,12 @@ var CorePlugin = /** @class */ (function () {
     __decorate([
         billy_core_1.Action('gitClean')
     ], CorePlugin.prototype, "gitClean", null);
+    __decorate([
+        billy_core_1.Action('bump')
+    ], CorePlugin.prototype, "commitVersionBump", null);
+    __decorate([
+        billy_core_1.Action('push_to_remote')
+    ], CorePlugin.prototype, "pushToGitRemote", null);
     CorePlugin = __decorate([
         billy_core_1.Plugin('billy-plugin-core')
     ], CorePlugin);
