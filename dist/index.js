@@ -140,7 +140,7 @@ var CorePlugin = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         if (!path) return [3 /*break*/, 2];
-                        return [4 /*yield*/, exec("cd " + path + " && git status --porcelain ")];
+                        return [4 /*yield*/, exec("git --git-dir=" + path + "/.git --work-tree=" + path + " status --porcelain")];
                     case 1:
                         _a = _b.sent();
                         return [3 /*break*/, 4];
@@ -164,7 +164,7 @@ var CorePlugin = /** @class */ (function () {
                         m = "bump(" + version + ")";
                         m = message ? m + ': ' + message : m;
                         if (!path) return [3 /*break*/, 2];
-                        return [4 /*yield*/, exec("git add " + path + " -A && git commit " + path + " -m \"" + m + "\"")];
+                        return [4 /*yield*/, exec("git --git-dir=" + path + "/.git --work-tree=" + path + " add -A && git --git-dir=" + path + "/.git --work-tree=" + path + " commit -m \"" + m + "\"")];
                     case 1:
                         _a = _b.sent();
                         return [3 /*break*/, 4];
@@ -184,13 +184,13 @@ var CorePlugin = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         r = remote || 'origin';
-                        return [4 /*yield*/, exec("git rev-parse --symbolic-full-name --abbrev-ref HEAD")];
+                        return [4 /*yield*/, exec("git --git-dir=" + path + "/.git --work-tree=" + path + " rev-parse --symbolic-full-name --abbrev-ref HEAD")];
                     case 1:
                         curB = (_b.sent()).stdout.replace('\n', '');
                         lB = localBranch || curB;
                         rB = remoteBranch || lB;
                         if (!path) return [3 /*break*/, 3];
-                        return [4 /*yield*/, exec("git push " + path + " " + r + " \"" + lB + ":" + rB + "\"")];
+                        return [4 /*yield*/, exec("git --git-dir=" + path + "/.git --work-tree=" + path + " push " + r + " \"" + lB + ":" + rB + "\"")];
                     case 2:
                         _a = _b.sent();
                         return [3 /*break*/, 5];

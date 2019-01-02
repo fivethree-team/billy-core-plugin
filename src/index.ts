@@ -77,7 +77,7 @@ export default class CorePlugin {
 
     @Action('gitClean')
     async gitClean(path?: string): Promise<boolean> {
-        const status = path ? await exec(`cd ${path} && git status --porcelain `) : await exec('git status --porcelain ');
+        const status = path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} status --porcelain`) : await exec('git status --porcelain ');
         return status.stdout.length === 0 && status.stderr.length === 0;
     }
 
@@ -85,16 +85,16 @@ export default class CorePlugin {
     async commitVersionBump(version: string, message: string, path?: string) {
         let m = `bump(${version})`;
         m = message ? m + ': ' + message : m;
-        return path ? await exec(`git add ${path} -A && git commit ${path} -m "${m}"`) : await exec(`git add -A && git commit -m "${m}"`);
+        return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} add -A && git --git-dir=${path}/.git --work-tree=${path} commit -m "${m}"`) : await exec(`git add -A && git commit -m "${m}"`);
     }
 
     @Action('push_to_remote')
     async pushToGitRemote(path?: string, remote?: string, localBranch?: string, remoteBranch?: string) {
         const r = remote || 'origin';
-        const curB = (await exec("git rev-parse --symbolic-full-name --abbrev-ref HEAD")).stdout.replace('\n', '');
+        const curB = (await exec(`git --git-dir=${path}/.git --work-tree=${path} rev-parse --symbolic-full-name --abbrev-ref HEAD`)).stdout.replace('\n', '');
         const lB = localBranch || curB;
         const rB = remoteBranch || lB;
-        return path ? await exec(`git push ${path} ${r} "${lB}:${rB}"`) : await exec(`git push ${r} "${lB}:${rB}"`);
+        return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} push ${r} "${lB}:${rB}"`) : await exec(`git push ${r} "${lB}:${rB}"`);
     }
 
 }
