@@ -4,7 +4,7 @@ const path = require('path');
 const { prompt } = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-const camelCase = require('camelcase');
+// const camelCase = require('camelcase');
 
 @Plugin('billy-plugin-core')
 export default class CorePlugin {
