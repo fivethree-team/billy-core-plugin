@@ -12,5 +12,4 @@ export default class CorePlugin {
     gitClean(path?: string): Promise<boolean>;
     bump(version: string, message: string, path?: string): Promise<any>;
     push(path?: string, remote?: string, localBranch?: string, remoteBranch?: string): Promise<any>;
-    logDependencies(): Promise<void>;
 }

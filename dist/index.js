@@ -47,7 +47,6 @@ var path = require('path');
 var prompt = require('inquirer').prompt;
 var util = require('util');
 var exec = util.promisify(require('child_process').exec);
-// const camelCase = require('camelcase');
 var CorePlugin = /** @class */ (function () {
     function CorePlugin() {
     }
@@ -204,29 +203,6 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
-    // @Action('camel case')
-    // async camelcase(text: string | string[]) {
-    //     return camelCase(text, { pascalCase: false });
-    // }
-    // @Action('pascal case')
-    // async pascalcase(text: string | string[]) {
-    //     return camelCase(text, { pascalCase: true });
-    // }
-    CorePlugin.prototype.logDependencies = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        _b = (_a = console).log;
-                        return [4 /*yield*/, exec('ls node_modules')];
-                    case 1:
-                        _b.apply(_a, [(_c.sent())]);
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
     __decorate([
         billy_core_1.Action('print in console')
     ], CorePlugin.prototype, "print", null);
@@ -266,9 +242,6 @@ var CorePlugin = /** @class */ (function () {
     __decorate([
         billy_core_1.Action('push_to_remote')
     ], CorePlugin.prototype, "push", null);
-    __decorate([
-        billy_core_1.Action('log dependencies')
-    ], CorePlugin.prototype, "logDependencies", null);
     CorePlugin = __decorate([
         billy_core_1.Plugin('billy-plugin-core')
     ], CorePlugin);

@@ -4,7 +4,6 @@ const path = require('path');
 const { prompt } = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-// const camelCase = require('camelcase');
 
 @Plugin('billy-plugin-core')
 export default class CorePlugin {
@@ -110,21 +109,6 @@ export default class CorePlugin {
         const lB = localBranch || curB;
         const rB = remoteBranch || lB;
         return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} push ${r} "${lB}:${rB}"`) : await exec(`git push ${r} "${lB}:${rB}"`);
-    }
-
-    // @Action('camel case')
-    // async camelcase(text: string | string[]) {
-    //     return camelCase(text, { pascalCase: false });
-    // }
-
-    // @Action('pascal case')
-    // async pascalcase(text: string | string[]) {
-    //     return camelCase(text, { pascalCase: true });
-    // }
-
-    @Action('log dependencies')
-    async logDependencies() {
-        console.log((await exec('ls node_modules')));
     }
 
 }
