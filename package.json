@@ -1,6 +1,6 @@
 {
     "name": "@fivethree/billy-plugin-core",
-    "version": "0.3.11",
+    "version": "0.3.12",
     "description": "core plugin",
     "main": "dist/index.js",
     "scripts": {
@@ -20,7 +20,7 @@
         "@types/node": "^10.12.18",
         "nodemon": "^1.18.9",
         "ts-node": "^7.0.1",
-        "@fivethree/billy-core": "file:/Users/garygrossgarten/dev/things/billy/billy-core",
+        "@fivethree/billy-core": "0.3.12",
         "typescript": "^3.2.2",
         "inquirer": "^6.2.1"
     },
