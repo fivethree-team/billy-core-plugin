@@ -1,13 +1,15 @@
-import { Plugin, Action, LaneType, Application } from '@fivethree/billy-core';
+import { Plugin, Action } from '@fivethree/billy-core';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 const path = require('path');
 const { prompt } = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const camelCase = require('camelcase');
+
 @Plugin('billy-plugin-core')
 export default class CorePlugin {
 
-    @Action('print')
+    @Action('print in console')
     print(text: string) {
         console.log(text);
     }
@@ -23,11 +25,6 @@ export default class CorePlugin {
         })
     }
 
-    @Action('run')
-    async run(app: Application, ...lanes: LaneType[]) {
-        await app.takeMultiple(lanes);
-    }
-
     @Action('parseJSON')
     parseJSON(pathToJSON) {
         if (existsSync(pathToJSON)) {
@@ -38,11 +35,29 @@ export default class CorePlugin {
     }
 
     @Action('writeJSON')
-    write(path, content) {
+    writeJSON(path, content) {
         if (existsSync(path)) {
             return writeFileSync(path, JSON.stringify(content, null, 4));
         } else {
             throw new Error(`File doesn't exists: ${path}.`);
+        }
+    }
+
+    @Action('read file from disk')
+    readText(pathToFile: string) {
+        if (existsSync(pathToFile)) {
+            return readFileSync(pathToFile, 'utf8');
+        } else {
+            throw new Error(`Couldn't find file at path: ${pathToFile}.`);
+        }
+    }
+
+    @Action('write file to disk')
+    writeText(pathToFile, content) {
+        if (existsSync(pathToFile)) {
+            return writeFileSync(pathToFile, content);
+        } else {
+            throw new Error(`File doesn't exists: ${pathToFile}.`);
         }
     }
 
@@ -70,8 +85,8 @@ export default class CorePlugin {
         return await exec(command);
     }
 
-    @Action('isBilly')
-    isBilly(): boolean {
+    @Action('billy')
+    billy(): boolean {
         return existsSync('./node_modules/@fivethree/billy-core');
     }
 
@@ -82,19 +97,29 @@ export default class CorePlugin {
     }
 
     @Action('bump')
-    async commitVersionBump(version: string, message: string, path?: string) {
+    async bump(version: string, message: string, path?: string) {
         let m = `bump(${version})`;
         m = message ? m + ': ' + message : m;
         return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} add -A && git --git-dir=${path}/.git --work-tree=${path} commit -m "${m}"`) : await exec(`git add -A && git commit -m "${m}"`);
     }
 
     @Action('push_to_remote')
-    async pushToGitRemote(path?: string, remote?: string, localBranch?: string, remoteBranch?: string) {
+    async push(path?: string, remote?: string, localBranch?: string, remoteBranch?: string) {
         const r = remote || 'origin';
         const curB = (await exec(`git --git-dir=${path}/.git --work-tree=${path} rev-parse --symbolic-full-name --abbrev-ref HEAD`)).stdout.replace('\n', '');
         const lB = localBranch || curB;
         const rB = remoteBranch || lB;
         return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} push ${r} "${lB}:${rB}"`) : await exec(`git push ${r} "${lB}:${rB}"`);
+    }
+
+    @Action('camel case')
+    async camelcase(text: string | string[]) {
+        return camelCase(text, { pascalCase: false });
+    }
+
+    @Action('pascal case')
+    async pascalcase(text: string | string[]) {
+        return camelCase(text, { pascalCase: true });
     }
 
 }

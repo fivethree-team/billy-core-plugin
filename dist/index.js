@@ -47,6 +47,7 @@ var path = require('path');
 var prompt = require('inquirer').prompt;
 var util = require('util');
 var exec = util.promisify(require('child_process').exec);
+var camelCase = require('camelcase');
 var CorePlugin = /** @class */ (function () {
     function CorePlugin() {
     }
@@ -66,22 +67,6 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
-    CorePlugin.prototype.run = function (app) {
-        var lanes = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            lanes[_i - 1] = arguments[_i];
-        }
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, app.takeMultiple(lanes)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
     CorePlugin.prototype.parseJSON = function (pathToJSON) {
         if (fs_1.existsSync(pathToJSON)) {
             return JSON.parse(fs_1.readFileSync(pathToJSON, 'utf8'));
@@ -90,12 +75,28 @@ var CorePlugin = /** @class */ (function () {
             throw new Error("Couldn't find file at path: " + pathToJSON + ".");
         }
     };
-    CorePlugin.prototype.write = function (path, content) {
+    CorePlugin.prototype.writeJSON = function (path, content) {
         if (fs_1.existsSync(path)) {
             return fs_1.writeFileSync(path, JSON.stringify(content, null, 4));
         }
         else {
             throw new Error("File doesn't exists: " + path + ".");
+        }
+    };
+    CorePlugin.prototype.readText = function (pathToFile) {
+        if (fs_1.existsSync(pathToFile)) {
+            return fs_1.readFileSync(pathToFile, 'utf8');
+        }
+        else {
+            throw new Error("Couldn't find file at path: " + pathToFile + ".");
+        }
+    };
+    CorePlugin.prototype.writeText = function (pathToFile, content) {
+        if (fs_1.existsSync(pathToFile)) {
+            return fs_1.writeFileSync(pathToFile, content);
+        }
+        else {
+            throw new Error("File doesn't exists: " + pathToFile + ".");
         }
     };
     CorePlugin.prototype.prompt = function (args) {
@@ -130,7 +131,7 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
-    CorePlugin.prototype.isBilly = function () {
+    CorePlugin.prototype.billy = function () {
         return fs_1.existsSync('./node_modules/@fivethree/billy-core');
     };
     CorePlugin.prototype.gitClean = function (path) {
@@ -155,7 +156,7 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
-    CorePlugin.prototype.commitVersionBump = function (version, message, path) {
+    CorePlugin.prototype.bump = function (version, message, path) {
         return __awaiter(this, void 0, void 0, function () {
             var m, _a;
             return __generator(this, function (_b) {
@@ -177,7 +178,7 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
-    CorePlugin.prototype.pushToGitRemote = function (path, remote, localBranch, remoteBranch) {
+    CorePlugin.prototype.push = function (path, remote, localBranch, remoteBranch) {
         return __awaiter(this, void 0, void 0, function () {
             var r, curB, lB, rB, _a;
             return __generator(this, function (_b) {
@@ -203,21 +204,38 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
+    CorePlugin.prototype.camelcase = function (text) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, camelCase(text, { pascalCase: false })];
+            });
+        });
+    };
+    CorePlugin.prototype.pascalcase = function (text) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, camelCase(text, { pascalCase: true })];
+            });
+        });
+    };
     __decorate([
-        billy_core_1.Action('print')
+        billy_core_1.Action('print in console')
     ], CorePlugin.prototype, "print", null);
     __decorate([
         billy_core_1.Action('wait')
     ], CorePlugin.prototype, "wait", null);
     __decorate([
-        billy_core_1.Action('run')
-    ], CorePlugin.prototype, "run", null);
-    __decorate([
         billy_core_1.Action('parseJSON')
     ], CorePlugin.prototype, "parseJSON", null);
     __decorate([
         billy_core_1.Action('writeJSON')
-    ], CorePlugin.prototype, "write", null);
+    ], CorePlugin.prototype, "writeJSON", null);
+    __decorate([
+        billy_core_1.Action('read file from disk')
+    ], CorePlugin.prototype, "readText", null);
+    __decorate([
+        billy_core_1.Action('write file to disk')
+    ], CorePlugin.prototype, "writeText", null);
     __decorate([
         billy_core_1.Action('prompt')
     ], CorePlugin.prototype, "prompt", null);
@@ -228,17 +246,23 @@ var CorePlugin = /** @class */ (function () {
         billy_core_1.Action('exec')
     ], CorePlugin.prototype, "exec", null);
     __decorate([
-        billy_core_1.Action('isBilly')
-    ], CorePlugin.prototype, "isBilly", null);
+        billy_core_1.Action('billy')
+    ], CorePlugin.prototype, "billy", null);
     __decorate([
         billy_core_1.Action('gitClean')
     ], CorePlugin.prototype, "gitClean", null);
     __decorate([
         billy_core_1.Action('bump')
-    ], CorePlugin.prototype, "commitVersionBump", null);
+    ], CorePlugin.prototype, "bump", null);
     __decorate([
         billy_core_1.Action('push_to_remote')
-    ], CorePlugin.prototype, "pushToGitRemote", null);
+    ], CorePlugin.prototype, "push", null);
+    __decorate([
+        billy_core_1.Action('camel case')
+    ], CorePlugin.prototype, "camelcase", null);
+    __decorate([
+        billy_core_1.Action('pascal case')
+    ], CorePlugin.prototype, "pascalcase", null);
     CorePlugin = __decorate([
         billy_core_1.Plugin('billy-plugin-core')
     ], CorePlugin);
