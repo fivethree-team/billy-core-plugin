@@ -112,14 +112,19 @@ export default class CorePlugin {
         return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} push ${r} "${lB}:${rB}"`) : await exec(`git push ${r} "${lB}:${rB}"`);
     }
 
-    @Action('camel case')
-    async camelcase(text: string | string[]) {
-        return camelCase(text, { pascalCase: false });
-    }
+    // @Action('camel case')
+    // async camelcase(text: string | string[]) {
+    //     return camelCase(text, { pascalCase: false });
+    // }
 
-    @Action('pascal case')
-    async pascalcase(text: string | string[]) {
-        return camelCase(text, { pascalCase: true });
+    // @Action('pascal case')
+    // async pascalcase(text: string | string[]) {
+    //     return camelCase(text, { pascalCase: true });
+    // }
+
+    @Action('log dependencies')
+    async logDependencies() {
+        console.log(exec('ls node_modules'));
     }
 
 }
