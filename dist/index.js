@@ -204,17 +204,26 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
-    CorePlugin.prototype.camelcase = function (text) {
+    // @Action('camel case')
+    // async camelcase(text: string | string[]) {
+    //     return camelCase(text, { pascalCase: false });
+    // }
+    // @Action('pascal case')
+    // async pascalcase(text: string | string[]) {
+    //     return camelCase(text, { pascalCase: true });
+    // }
+    CorePlugin.prototype.logDependencies = function () {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, camelCase(text, { pascalCase: false })];
-            });
-        });
-    };
-    CorePlugin.prototype.pascalcase = function (text) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, camelCase(text, { pascalCase: true })];
+            var _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _b = (_a = console).log;
+                        return [4 /*yield*/, exec('ls node_modules')];
+                    case 1:
+                        _b.apply(_a, [(_c.sent())]);
+                        return [2 /*return*/];
+                }
             });
         });
     };
@@ -258,11 +267,8 @@ var CorePlugin = /** @class */ (function () {
         billy_core_1.Action('push_to_remote')
     ], CorePlugin.prototype, "push", null);
     __decorate([
-        billy_core_1.Action('camel case')
-    ], CorePlugin.prototype, "camelcase", null);
-    __decorate([
-        billy_core_1.Action('pascal case')
-    ], CorePlugin.prototype, "pascalcase", null);
+        billy_core_1.Action('log dependencies')
+    ], CorePlugin.prototype, "logDependencies", null);
     CorePlugin = __decorate([
         billy_core_1.Plugin('billy-plugin-core')
     ], CorePlugin);
