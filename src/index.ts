@@ -124,7 +124,7 @@ export default class CorePlugin {
 
     @Action('log dependencies')
     async logDependencies() {
-        console.log(exec('ls node_modules'));
+        console.log((await exec('ls node_modules')));
     }
 
 }
