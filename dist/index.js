@@ -47,7 +47,7 @@ var path = require('path');
 var prompt = require('inquirer').prompt;
 var util = require('util');
 var exec = util.promisify(require('child_process').exec);
-var camelCase = require('camelcase');
+// const camelCase = require('camelcase');
 var CorePlugin = /** @class */ (function () {
     function CorePlugin() {
     }
