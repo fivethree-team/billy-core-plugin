@@ -1,4 +1,4 @@
-export declare class CorePlugin {
+export default class CorePlugin {
     print(...args: string[] | any[]): void;
     wait(dur: number): Promise<void>;
     parseJSON(path: string): any;
