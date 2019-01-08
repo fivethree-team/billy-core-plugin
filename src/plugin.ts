@@ -5,7 +5,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 @Plugin('billy-plugin-core')
-export class CorePlugin {
+export default class CorePlugin {
 
     @Action('print in console')
     print(...args: string[] | any[]) {
