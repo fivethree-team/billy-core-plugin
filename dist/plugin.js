@@ -250,4 +250,4 @@ var CorePlugin = /** @class */ (function () {
     ], CorePlugin);
     return CorePlugin;
 }());
-exports.default = CorePlugin;
+exports.CorePlugin = CorePlugin;
