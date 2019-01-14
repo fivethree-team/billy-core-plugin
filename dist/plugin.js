@@ -46,6 +46,7 @@ var fs_1 = require("fs");
 var prompt = require('inquirer').prompt;
 var util = require('util');
 var exec = util.promisify(require('child_process').exec);
+var camelCase = require('camelcase');
 var CorePlugin = /** @class */ (function () {
     function CorePlugin() {
     }
@@ -206,6 +207,15 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
+    CorePlugin.prototype.camelcase = function (s, pascalCase) {
+        if (pascalCase === void 0) { pascalCase = false; }
+        console.log('camelcase', s, pascalCase, camelCase, camelCase(s));
+        var camel = camelCase(s);
+        if (pascalCase) {
+            return camel.charAt(0).toUpperCase() + camel.slice(1);
+        }
+        return camel;
+    };
     __decorate([
         billy_core_1.Action('print in console')
     ], CorePlugin.prototype, "print", null);
@@ -245,6 +255,9 @@ var CorePlugin = /** @class */ (function () {
     __decorate([
         billy_core_1.Action('push_to_remote')
     ], CorePlugin.prototype, "push", null);
+    __decorate([
+        billy_core_1.Action('camelcase')
+    ], CorePlugin.prototype, "camelcase", null);
     CorePlugin = __decorate([
         billy_core_1.Plugin('billy-plugin-core')
     ], CorePlugin);

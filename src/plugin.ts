@@ -3,7 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 const { prompt } = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-
+const camelCase = require('camelcase');
 @Plugin('billy-plugin-core')
 export class CorePlugin {
 
@@ -108,6 +108,17 @@ export class CorePlugin {
         const lB = localBranch || curB;
         const rB = remoteBranch || lB;
         return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} push ${r} "${lB}:${rB}"`) : await exec(`git push ${r} "${lB}:${rB}"`);
+    }
+
+    @Action('camelcase')
+    camelcase(s: string, pascalCase: boolean = false) {
+        console.log('camelcase', s, pascalCase, camelCase, camelCase(s));
+        const camel = camelCase(s);
+        if (pascalCase) {
+            return camel.charAt(0).toUpperCase() + camel.slice(1);
+        }
+        return camel;
+
     }
 
 }
