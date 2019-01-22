@@ -47,6 +47,7 @@ var prompt = require('inquirer').prompt;
 var util = require('util');
 var exec = util.promisify(require('child_process').exec);
 var camelCase = require('camelcase');
+var axios = require('axios');
 var CorePlugin = /** @class */ (function () {
     function CorePlugin() {
     }

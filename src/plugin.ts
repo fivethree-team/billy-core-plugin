@@ -4,6 +4,7 @@ const { prompt } = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const camelCase = require('camelcase');
+const axios = require('axios');
 @Plugin('billy-plugin-core')
 export class CorePlugin {
 
@@ -118,7 +119,6 @@ export class CorePlugin {
             return camel.charAt(0).toUpperCase() + camel.slice(1);
         }
         return camel;
-
     }
 
 }
