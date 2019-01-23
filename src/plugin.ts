@@ -102,7 +102,14 @@ export class CorePlugin {
         return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} add -A && git --git-dir=${path}/.git --work-tree=${path} commit -m "${m}"`) : await exec(`git add -A && git commit -m "${m}"`);
     }
 
-    @Action('push_to_remote')
+    @Action('commit')
+    async commit(type: string, scope: string, message: string, path?: string) {
+        let m = `${type}(${scope})`;
+        m = message ? m + ': ' + message : m;
+        return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} add -A && git --git-dir=${path}/.git --work-tree=${path} commit -m "${m}"`) : await exec(`git add -A && git commit -m "${m}"`);
+    }
+
+    @Action('push to remote')
     async push(path?: string, remote?: string, localBranch?: string, remoteBranch?: string) {
         const r = remote || 'origin';
         const curB = (await exec(`git --git-dir=${path}/.git --work-tree=${path} rev-parse --symbolic-full-name --abbrev-ref HEAD`)).stdout.replace('\n', '');

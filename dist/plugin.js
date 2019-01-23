@@ -182,6 +182,28 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
+    CorePlugin.prototype.commit = function (type, scope, message, path) {
+        return __awaiter(this, void 0, void 0, function () {
+            var m, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        m = type + "(" + scope + ")";
+                        m = message ? m + ': ' + message : m;
+                        if (!path) return [3 /*break*/, 2];
+                        return [4 /*yield*/, exec("git --git-dir=" + path + "/.git --work-tree=" + path + " add -A && git --git-dir=" + path + "/.git --work-tree=" + path + " commit -m \"" + m + "\"")];
+                    case 1:
+                        _a = _b.sent();
+                        return [3 /*break*/, 4];
+                    case 2: return [4 /*yield*/, exec("git add -A && git commit -m \"" + m + "\"")];
+                    case 3:
+                        _a = _b.sent();
+                        _b.label = 4;
+                    case 4: return [2 /*return*/, _a];
+                }
+            });
+        });
+    };
     CorePlugin.prototype.push = function (path, remote, localBranch, remoteBranch) {
         return __awaiter(this, void 0, void 0, function () {
             var r, curB, lB, rB, _a;
@@ -254,7 +276,10 @@ var CorePlugin = /** @class */ (function () {
         billy_core_1.Action('bump')
     ], CorePlugin.prototype, "bump", null);
     __decorate([
-        billy_core_1.Action('push_to_remote')
+        billy_core_1.Action('commit')
+    ], CorePlugin.prototype, "commit", null);
+    __decorate([
+        billy_core_1.Action('push to remote')
     ], CorePlugin.prototype, "push", null);
     __decorate([
         billy_core_1.Action('camelcase')
