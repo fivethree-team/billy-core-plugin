@@ -46,6 +46,7 @@ var fs_1 = require("fs");
 var prompt = require('inquirer').prompt;
 var util = require('util');
 var exec = util.promisify(require('child_process').exec);
+var spawn = require('child_process').spawn;
 var camelCase = require('camelcase');
 var axios = require('axios');
 var CorePlugin = /** @class */ (function () {
@@ -125,12 +126,40 @@ var CorePlugin = /** @class */ (function () {
     CorePlugin.prototype.exists = function (path) {
         return fs_1.existsSync(path);
     };
-    CorePlugin.prototype.exec = function (command) {
+    CorePlugin.prototype.exec = function (command, printToConsole) {
+        if (printToConsole === void 0) { printToConsole = false; }
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, exec(command)];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0:
+                        if (!printToConsole) return [3 /*break*/, 1];
+                        return [2 /*return*/, new Promise(function (resolve, reject) {
+                                var stdout = '';
+                                var stderr = '';
+                                var child = spawn(command, { shell: true });
+                                child.on('close', function (code, signal) {
+                                    resolve({ code: code, signal: signal, stdout: stdout, stderr: stderr });
+                                });
+                                child.on('error', function (error) {
+                                    error.stderr = stderr;
+                                    reject(error);
+                                });
+                                child.on('exit', function (code, signal) {
+                                    resolve({ code: code, signal: signal, stdout: stdout, stderr: stderr });
+                                });
+                                child.stdout.setEncoding('utf8');
+                                child.stderr.setEncoding('utf8');
+                                child.stdout.on('data', function (data) {
+                                    console.log(data);
+                                    stdout += data;
+                                });
+                                child.stderr.on('data', function (data) {
+                                    console.error(data);
+                                    stderr += data;
+                                });
+                            })];
+                    case 1: return [4 /*yield*/, exec(command)];
+                    case 2: return [2 /*return*/, _a.sent()];
                 }
             });
         });

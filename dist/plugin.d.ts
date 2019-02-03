@@ -7,7 +7,7 @@ export declare class CorePlugin {
     writeText(path: string, content: any): void;
     prompt(args: any[] | string): Promise<any>;
     exists(path: string): boolean;
-    exec(command: string): Promise<any>;
+    exec(command: string | string[], printToConsole?: boolean): Promise<any>;
     billy(): boolean;
     gitClean(path?: string): Promise<boolean>;
     bump(version: string, message: string, path?: string): Promise<any>;

@@ -3,6 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 const { prompt } = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const spawn = require('child_process').spawn;
 const camelCase = require('camelcase');
 const axios = require('axios');
 @Plugin('billy-plugin-core')
@@ -80,8 +81,41 @@ export class CorePlugin {
     }
 
     @Action('exec')
-    async exec(command: string) {
-        return await exec(command);
+    async exec(command: string | string[], printToConsole = false) {
+        if (printToConsole) {
+            return new Promise((resolve, reject) => {
+                let stdout = '';
+                let stderr = '';
+                const child = spawn(command,{shell: true});
+                child.on('close', (code, signal) => {
+                    resolve({ code, signal, stdout, stderr });
+                });
+
+                child.on('error', (error) => {
+                    (error as any).stderr = stderr;
+                    reject(error);
+                });
+
+                child.on('exit', (code, signal) => {
+                    resolve({ code, signal, stdout, stderr });
+                });
+
+                child.stdout.setEncoding('utf8');
+                child.stderr.setEncoding('utf8');
+
+                child.stdout.on('data', (data) => {
+                    console.log(data);
+                    stdout += data;
+                });
+
+                child.stderr.on('data', (data) => {
+                    console.error(data);
+                    stderr += data;
+                });
+            });
+        } else {
+            return await exec(command);
+        }
     }
 
     @Action('billy')
