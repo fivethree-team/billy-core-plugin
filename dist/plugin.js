@@ -134,28 +134,9 @@ var CorePlugin = /** @class */ (function () {
                     case 0:
                         if (!printToConsole) return [3 /*break*/, 1];
                         return [2 /*return*/, new Promise(function (resolve, reject) {
-                                var stdout = '';
-                                var stderr = '';
-                                var child = spawn(command, { shell: true });
+                                var child = spawn(command, { shell: true, stdio: "inherit" });
                                 child.on('close', function (code, signal) {
-                                    resolve({ code: code, signal: signal, stdout: stdout, stderr: stderr });
-                                });
-                                child.on('error', function (error) {
-                                    error.stderr = stderr;
-                                    reject(error);
-                                });
-                                child.on('exit', function (code, signal) {
-                                    resolve({ code: code, signal: signal, stdout: stdout, stderr: stderr });
-                                });
-                                child.stdout.setEncoding('utf8');
-                                child.stderr.setEncoding('utf8');
-                                child.stdout.on('data', function (data) {
-                                    console.log(data);
-                                    stdout += data;
-                                });
-                                child.stderr.on('data', function (data) {
-                                    console.error(data);
-                                    stderr += data;
+                                    resolve({ code: code, signal: signal });
                                 });
                             })];
                     case 1: return [4 /*yield*/, exec(command)];

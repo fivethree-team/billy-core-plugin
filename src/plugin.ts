@@ -81,36 +81,12 @@ export class CorePlugin {
     }
 
     @Action('exec')
-    async exec(command: string | string[], printToConsole = false) {
+    async exec(command: string | string[], printToConsole = false) {
         if (printToConsole) {
             return new Promise((resolve, reject) => {
-                let stdout = '';
-                let stderr = '';
-                const child = spawn(command,{shell: true});
+                const child = spawn(command, { shell: true, stdio: "inherit" });
                 child.on('close', (code, signal) => {
-                    resolve({ code, signal, stdout, stderr });
-                });
-
-                child.on('error', (error) => {
-                    (error as any).stderr = stderr;
-                    reject(error);
-                });
-
-                child.on('exit', (code, signal) => {
-                    resolve({ code, signal, stdout, stderr });
-                });
-
-                child.stdout.setEncoding('utf8');
-                child.stderr.setEncoding('utf8');
-
-                child.stdout.on('data', (data) => {
-                    console.log(data);
-                    stdout += data;
-                });
-
-                child.stderr.on('data', (data) => {
-                    console.error(data);
-                    stderr += data;
+                    resolve({ code, signal });
                 });
             });
         } else {
