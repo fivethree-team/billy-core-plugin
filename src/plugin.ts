@@ -95,8 +95,8 @@ export class CorePlugin {
     }
 
     @Action('billy')
-    billy(): boolean {
-        return existsSync('./node_modules/@fivethree/billy-core');
+    billy(path = '.'): boolean {
+        return existsSync(path + '/node_modules/@fivethree/billy-core');
     }
 
     @Action('gitClean')

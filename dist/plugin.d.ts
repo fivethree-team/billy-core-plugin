@@ -8,7 +8,7 @@ export declare class CorePlugin {
     prompt(args: any[] | string): Promise<any>;
     exists(path: string): boolean;
     exec(command: string | string[], printToConsole?: boolean): Promise<any>;
-    billy(): boolean;
+    billy(path?: string): boolean;
     gitClean(path?: string): Promise<boolean>;
     bump(version: string, message: string, path?: string): Promise<any>;
     commit(type: string, scope: string, message: string, path?: string): Promise<any>;

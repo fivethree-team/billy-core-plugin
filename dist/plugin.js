@@ -145,8 +145,9 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
-    CorePlugin.prototype.billy = function () {
-        return fs_1.existsSync('./node_modules/@fivethree/billy-core');
+    CorePlugin.prototype.billy = function (path) {
+        if (path === void 0) { path = '.'; }
+        return fs_1.existsSync(path + '/node_modules/@fivethree/billy-core');
     };
     CorePlugin.prototype.gitClean = function (path) {
         return __awaiter(this, void 0, void 0, function () {
