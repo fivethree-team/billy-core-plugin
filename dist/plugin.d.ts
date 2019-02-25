@@ -14,4 +14,5 @@ export declare class CorePlugin {
     commit(type: string, scope: string, message: string, path?: string): Promise<any>;
     push(path?: string, remote?: string, localBranch?: string, remoteBranch?: string): Promise<any>;
     camelcase(s: string, pascalCase?: boolean): any;
+    pluginLane(): Promise<void>;
 }

@@ -1,4 +1,4 @@
-import { Plugin, Action } from '@fivethree/billy-core';
+import { Plugin, Action, Lane } from '@fivethree/billy-core';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 const { prompt } = require('inquirer');
 const util = require('util');
@@ -136,6 +136,11 @@ export class CorePlugin {
             return camel.charAt(0).toUpperCase() + camel.slice(1);
         }
         return camel;
+    }
+
+    @Lane('Plugin Lane')
+    async pluginLane() {
+        console.log('plugin lane');
     }
 
 }

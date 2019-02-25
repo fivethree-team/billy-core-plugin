@@ -250,6 +250,14 @@ var CorePlugin = /** @class */ (function () {
         }
         return camel;
     };
+    CorePlugin.prototype.pluginLane = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                console.log('plugin lane');
+                return [2 /*return*/];
+            });
+        });
+    };
     __decorate([
         billy_core_1.Action('print in console')
     ], CorePlugin.prototype, "print", null);
@@ -295,6 +303,9 @@ var CorePlugin = /** @class */ (function () {
     __decorate([
         billy_core_1.Action('camelcase')
     ], CorePlugin.prototype, "camelcase", null);
+    __decorate([
+        billy_core_1.Lane('Plugin Lane')
+    ], CorePlugin.prototype, "pluginLane", null);
     CorePlugin = __decorate([
         billy_core_1.Plugin('billy-plugin-core')
     ], CorePlugin);
