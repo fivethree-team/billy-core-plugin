@@ -242,7 +242,6 @@ var CorePlugin = /** @class */ (function () {
     };
     CorePlugin.prototype.camelcase = function (s, pascalCase) {
         if (pascalCase === void 0) { pascalCase = false; }
-        console.log('camelcase', s, pascalCase, camelCase, camelCase(s));
         var camel = camelCase(s);
         if (pascalCase) {
             return camel.charAt(0).toUpperCase() + camel.slice(1);
