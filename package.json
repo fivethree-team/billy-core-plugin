@@ -2,7 +2,7 @@
     "name": "@fivethree/billy-plugin-core",
     "version": "0.8.2",
     "description": "core plugin",
-    "main": "dist/index.js",
+    "main": "dist/generated/index.js",
     "scripts": {
         "build": "node_modules/.bin/tsc -p .",
         "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
@@ -21,7 +21,7 @@
         "@types/node": "^10.12.18",
         "nodemon": "^1.18.9",
         "ts-node": "^7.0.1",
-        "@fivethree/billy-core": "0.8.2",
+        "@fivethree/billy-core": "file:/Users/garygrossgarten/dev/things/billy/billy-core",
         "typescript": "^3.2.2",
         "inquirer": "^6.2.1"
     },

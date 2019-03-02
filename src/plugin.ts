@@ -1,11 +1,10 @@
-import { Plugin, Action, Lane } from '@fivethree/billy-core';
+import { Plugin, Action } from '@fivethree/billy-core';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 const { prompt } = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const spawn = require('child_process').spawn;
 const camelCase = require('camelcase');
-const axios = require('axios');
 @Plugin('billy-plugin-core')
 export class CorePlugin {
 
@@ -130,17 +129,10 @@ export class CorePlugin {
 
     @Action('camelcase')
     camelcase(s: string, pascalCase: boolean = false) {
-        console.log('camelcase', s, pascalCase, camelCase, camelCase(s));
         const camel = camelCase(s);
         if (pascalCase) {
             return camel.charAt(0).toUpperCase() + camel.slice(1);
         }
         return camel;
     }
-
-    @Lane('Plugin Lane')
-    async pluginLane() {
-        console.log('plugin lane');
-    }
-
 }
