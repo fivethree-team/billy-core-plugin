@@ -35,11 +35,7 @@ export class CorePlugin {
 
     @Action('writeJSON')
     writeJSON(path: string, content: any) {
-        if (existsSync(path)) {
-            return writeFileSync(path, JSON.stringify(content, null, 4));
-        } else {
-            throw new Error(`File doesn't exists: ${path}.`);
-        }
+        return writeFileSync(path, JSON.stringify(content, null, 4));
     }
 
     @Action('read file from disk')
@@ -53,11 +49,7 @@ export class CorePlugin {
 
     @Action('write file to disk')
     writeText(path: string, content: any) {
-        if (existsSync(path)) {
-            return writeFileSync(path, content);
-        } else {
-            throw new Error(`File doesn't exists: ${path}.`);
-        }
+        return writeFileSync(path, content);
     }
 
     @Action('prompt')

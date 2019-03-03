@@ -80,12 +80,7 @@ var CorePlugin = /** @class */ (function () {
         }
     };
     CorePlugin.prototype.writeJSON = function (path, content) {
-        if (fs_1.existsSync(path)) {
-            return fs_1.writeFileSync(path, JSON.stringify(content, null, 4));
-        }
-        else {
-            throw new Error("File doesn't exists: " + path + ".");
-        }
+        return fs_1.writeFileSync(path, JSON.stringify(content, null, 4));
     };
     CorePlugin.prototype.readText = function (path) {
         if (fs_1.existsSync(path)) {
@@ -96,12 +91,7 @@ var CorePlugin = /** @class */ (function () {
         }
     };
     CorePlugin.prototype.writeText = function (path, content) {
-        if (fs_1.existsSync(path)) {
-            return fs_1.writeFileSync(path, content);
-        }
-        else {
-            throw new Error("File doesn't exists: " + path + ".");
-        }
+        return fs_1.writeFileSync(path, content);
     };
     CorePlugin.prototype.prompt = function (args) {
         return __awaiter(this, void 0, void 0, function () {
