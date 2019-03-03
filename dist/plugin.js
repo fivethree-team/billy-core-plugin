@@ -43,6 +43,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var billy_core_1 = require("@fivethree/billy-core");
 var fs_1 = require("fs");
+var billy_plugin_git_1 = require("@fivethree/billy-plugin-git");
 var prompt = require('inquirer').prompt;
 var util = require('util');
 var exec = util.promisify(require('child_process').exec);
@@ -138,28 +139,6 @@ var CorePlugin = /** @class */ (function () {
         if (path === void 0) { path = '.'; }
         return fs_1.existsSync(path + '/node_modules/@fivethree/billy-core');
     };
-    CorePlugin.prototype.gitClean = function (path) {
-        return __awaiter(this, void 0, void 0, function () {
-            var status, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (!path) return [3 /*break*/, 2];
-                        return [4 /*yield*/, exec("git --git-dir=" + path + "/.git --work-tree=" + path + " status --porcelain")];
-                    case 1:
-                        _a = _b.sent();
-                        return [3 /*break*/, 4];
-                    case 2: return [4 /*yield*/, exec('git status --porcelain ')];
-                    case 3:
-                        _a = _b.sent();
-                        _b.label = 4;
-                    case 4:
-                        status = _a;
-                        return [2 /*return*/, status.stdout.length === 0 && status.stderr.length === 0];
-                }
-            });
-        });
-    };
     CorePlugin.prototype.bump = function (version, message, path) {
         return __awaiter(this, void 0, void 0, function () {
             var m, _a;
@@ -182,54 +161,6 @@ var CorePlugin = /** @class */ (function () {
             });
         });
     };
-    CorePlugin.prototype.commit = function (type, scope, message, path) {
-        return __awaiter(this, void 0, void 0, function () {
-            var m, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        m = type + "(" + scope + ")";
-                        m = message ? m + ': ' + message : m;
-                        if (!path) return [3 /*break*/, 2];
-                        return [4 /*yield*/, exec("git --git-dir=" + path + "/.git --work-tree=" + path + " add -A && git --git-dir=" + path + "/.git --work-tree=" + path + " commit -m \"" + m + "\"")];
-                    case 1:
-                        _a = _b.sent();
-                        return [3 /*break*/, 4];
-                    case 2: return [4 /*yield*/, exec("git add -A && git commit -m \"" + m + "\"")];
-                    case 3:
-                        _a = _b.sent();
-                        _b.label = 4;
-                    case 4: return [2 /*return*/, _a];
-                }
-            });
-        });
-    };
-    CorePlugin.prototype.push = function (path, remote, localBranch, remoteBranch) {
-        return __awaiter(this, void 0, void 0, function () {
-            var r, curB, lB, rB, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        r = remote || 'origin';
-                        return [4 /*yield*/, exec("git --git-dir=" + path + "/.git --work-tree=" + path + " rev-parse --symbolic-full-name --abbrev-ref HEAD")];
-                    case 1:
-                        curB = (_b.sent()).stdout.replace('\n', '');
-                        lB = localBranch || curB;
-                        rB = remoteBranch || lB;
-                        if (!path) return [3 /*break*/, 3];
-                        return [4 /*yield*/, exec("git --git-dir=" + path + "/.git --work-tree=" + path + " push " + r + " \"" + lB + ":" + rB + "\"")];
-                    case 2:
-                        _a = _b.sent();
-                        return [3 /*break*/, 5];
-                    case 3: return [4 /*yield*/, exec("git push " + r + " \"" + lB + ":" + rB + "\"")];
-                    case 4:
-                        _a = _b.sent();
-                        _b.label = 5;
-                    case 5: return [2 /*return*/, _a];
-                }
-            });
-        });
-    };
     CorePlugin.prototype.camelcase = function (s, pascalCase) {
         if (pascalCase === void 0) { pascalCase = false; }
         var camel = camelCase(s);
@@ -238,6 +169,9 @@ var CorePlugin = /** @class */ (function () {
         }
         return camel;
     };
+    __decorate([
+        billy_core_1.usesPlugins(billy_plugin_git_1.GitPlugin)
+    ], CorePlugin.prototype, "this", void 0);
     __decorate([
         billy_core_1.Action('print in console')
     ], CorePlugin.prototype, "print", null);
@@ -269,17 +203,8 @@ var CorePlugin = /** @class */ (function () {
         billy_core_1.Action('billy')
     ], CorePlugin.prototype, "billy", null);
     __decorate([
-        billy_core_1.Action('gitClean')
-    ], CorePlugin.prototype, "gitClean", null);
-    __decorate([
         billy_core_1.Action('bump')
     ], CorePlugin.prototype, "bump", null);
-    __decorate([
-        billy_core_1.Action('commit')
-    ], CorePlugin.prototype, "commit", null);
-    __decorate([
-        billy_core_1.Action('push to remote')
-    ], CorePlugin.prototype, "push", null);
     __decorate([
         billy_core_1.Action('camelcase')
     ], CorePlugin.prototype, "camelcase", null);

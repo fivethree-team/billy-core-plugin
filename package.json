@@ -26,6 +26,7 @@
         "inquirer": "^6.2.1"
     },
     "dependencies": {
+        "@fivethree/billy-plugin-git": "0.0.2",
         "camelcase": "5.0.0"
     }
 }

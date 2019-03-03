@@ -1,12 +1,18 @@
-import { Plugin, Action } from '@fivethree/billy-core';
+import { Plugin, Action, usesPlugins } from '@fivethree/billy-core';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { GitPlugin } from '@fivethree/billy-plugin-git';
 const { prompt } = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const spawn = require('child_process').spawn;
 const camelCase = require('camelcase');
+
+export interface CorePlugin extends GitPlugin { }
+
 @Plugin('billy-plugin-core')
 export class CorePlugin {
+    @usesPlugins(GitPlugin) this;
+
 
     @Action('print in console')
     print(...args: string[] | any[]) {
@@ -90,33 +96,11 @@ export class CorePlugin {
         return existsSync(path + '/node_modules/@fivethree/billy-core');
     }
 
-    @Action('gitClean')
-    async gitClean(path?: string): Promise<boolean> {
-        const status = path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} status --porcelain`) : await exec('git status --porcelain ');
-        return status.stdout.length === 0 && status.stderr.length === 0;
-    }
-
     @Action('bump')
     async bump(version: string, message: string, path?: string) {
         let m = `bump(${version})`;
         m = message ? m + ': ' + message : m;
         return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} add -A && git --git-dir=${path}/.git --work-tree=${path} commit -m "${m}"`) : await exec(`git add -A && git commit -m "${m}"`);
-    }
-
-    @Action('commit')
-    async commit(type: string, scope: string, message: string, path?: string) {
-        let m = `${type}(${scope})`;
-        m = message ? m + ': ' + message : m;
-        return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} add -A && git --git-dir=${path}/.git --work-tree=${path} commit -m "${m}"`) : await exec(`git add -A && git commit -m "${m}"`);
-    }
-
-    @Action('push to remote')
-    async push(path?: string, remote?: string, localBranch?: string, remoteBranch?: string) {
-        const r = remote || 'origin';
-        const curB = (await exec(`git --git-dir=${path}/.git --work-tree=${path} rev-parse --symbolic-full-name --abbrev-ref HEAD`)).stdout.replace('\n', '');
-        const lB = localBranch || curB;
-        const rB = remoteBranch || lB;
-        return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} push ${r} "${lB}:${rB}"`) : await exec(`git push ${r} "${lB}:${rB}"`);
     }
 
     @Action('camelcase')

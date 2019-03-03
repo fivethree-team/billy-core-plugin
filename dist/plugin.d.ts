@@ -1,4 +1,8 @@
+import { GitPlugin } from '@fivethree/billy-plugin-git';
+export interface CorePlugin extends GitPlugin {
+}
 export declare class CorePlugin {
+    this: any;
     print(...args: string[] | any[]): void;
     wait(dur: number): Promise<void>;
     parseJSON(path: string): any;
@@ -9,9 +13,6 @@ export declare class CorePlugin {
     exists(path: string): boolean;
     exec(command: string | string[], printToConsole?: boolean): Promise<any>;
     billy(path?: string): boolean;
-    gitClean(path?: string): Promise<boolean>;
     bump(version: string, message: string, path?: string): Promise<any>;
-    commit(type: string, scope: string, message: string, path?: string): Promise<any>;
-    push(path?: string, remote?: string, localBranch?: string, remoteBranch?: string): Promise<any>;
     camelcase(s: string, pascalCase?: boolean): any;
 }
