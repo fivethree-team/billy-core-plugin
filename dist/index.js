@@ -126,11 +126,15 @@ var CorePlugin = /** @class */ (function () {
     CorePlugin.prototype.exec = function (command, printToConsole) {
         if (printToConsole === void 0) { printToConsole = false; }
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
-                        if (!printToConsole) return [3 /*break*/, 1];
-                        console.log(this.colorize('orange', "> " + command));
+                        if (!printToConsole) return [3 /*break*/, 2];
+                        _b = (_a = console).log;
+                        return [4 /*yield*/, this.colorize('orange', "> " + command)];
+                    case 1:
+                        _b.apply(_a, [(_c.sent())]);
                         return [2 /*return*/, new Promise(function (resolve, reject) {
                                 var error;
                                 var options = {
@@ -150,8 +154,8 @@ var CorePlugin = /** @class */ (function () {
                                     }
                                 });
                             })];
-                    case 1: return [4 /*yield*/, exec(command)];
-                    case 2: return [2 /*return*/, _a.sent()];
+                    case 2: return [4 /*yield*/, exec(command)];
+                    case 3: return [2 /*return*/, _c.sent()];
                 }
             });
         });

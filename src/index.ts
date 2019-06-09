@@ -81,7 +81,7 @@ export class CorePlugin {
     @Action('exec')
     async exec(command: string, printToConsole = false) {
         if (printToConsole) {
-            console.log(this.colorize('orange', `> ${command}`));
+            console.log((await this.colorize('orange', `> ${command}`)));
             return new Promise((resolve, reject) => {
                 let error;
                 const options: SpawnOptions = {
