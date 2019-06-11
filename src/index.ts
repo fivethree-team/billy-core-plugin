@@ -132,9 +132,4 @@ export class CorePlugin {
         return camel;
     }
 
-    @Command('start scheduled jobs')
-    async startJobs(@context() context: Context) {
-        this.print('start jobs');
-        context.api.scheduler.startJobs();
-    }
 }

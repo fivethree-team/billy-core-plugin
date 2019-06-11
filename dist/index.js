@@ -5,9 +5,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -197,15 +194,6 @@ var CorePlugin = /** @class */ (function () {
         }
         return camel;
     };
-    CorePlugin.prototype.startJobs = function (context) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.print('start jobs');
-                context.api.scheduler.startJobs();
-                return [2 /*return*/];
-            });
-        });
-    };
     __decorate([
         billy_core_1.usesPlugins(billy_plugin_git_1.GitPlugin),
         billy_core_1.Action('print in console')
@@ -246,10 +234,6 @@ var CorePlugin = /** @class */ (function () {
     __decorate([
         billy_core_1.Action('camelcase')
     ], CorePlugin.prototype, "camelcase", null);
-    __decorate([
-        billy_core_1.Command('start scheduled jobs'),
-        __param(0, billy_core_1.context())
-    ], CorePlugin.prototype, "startJobs", null);
     CorePlugin = __decorate([
         billy_core_1.Plugin('billy-plugin-core')
     ], CorePlugin);

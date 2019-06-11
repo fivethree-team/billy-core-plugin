@@ -1,4 +1,3 @@
-import { Context } from '@fivethree/billy-core';
 import { GitPlugin } from '@fivethree/billy-plugin-git';
 export interface CorePlugin extends GitPlugin {
 }
@@ -16,5 +15,4 @@ export declare class CorePlugin {
     colorize(color: string, input: string): string;
     bump(version: string, message: string, path?: string): Promise<any>;
     camelcase(s: string, pascalCase?: boolean): any;
-    startJobs(context: Context): Promise<void>;
 }
