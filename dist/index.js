@@ -56,13 +56,6 @@ var camelCase = require('camelcase');
 var CorePlugin = /** @class */ (function () {
     function CorePlugin() {
     }
-    CorePlugin.prototype.print = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        console.log.apply(console, args);
-    };
     CorePlugin.prototype.wait = function (dur) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -87,7 +80,7 @@ var CorePlugin = /** @class */ (function () {
     CorePlugin.prototype.writeJSON = function (path, content) {
         return fs_1.writeFileSync(path, JSON.stringify(content, null, 4));
     };
-    CorePlugin.prototype.readText = function (path) {
+    CorePlugin.prototype.readFile = function (path) {
         if (fs_1.existsSync(path)) {
             return fs_1.readFileSync(path, 'utf8');
         }
@@ -95,7 +88,7 @@ var CorePlugin = /** @class */ (function () {
             throw new Error("Couldn't find file at path: " + path + ".");
         }
     };
-    CorePlugin.prototype.writeText = function (path, content) {
+    CorePlugin.prototype.writeFile = function (path, content) {
         return fs_1.writeFileSync(path, content);
     };
     CorePlugin.prototype.prompt = function (args) {
@@ -120,14 +113,14 @@ var CorePlugin = /** @class */ (function () {
     CorePlugin.prototype.exists = function (path) {
         return fs_1.existsSync(path);
     };
-    CorePlugin.prototype.exec = function (command, printToConsole) {
-        if (printToConsole === void 0) { printToConsole = false; }
+    CorePlugin.prototype.exec = function (command, print) {
+        if (print === void 0) { print = false; }
         return __awaiter(this, void 0, void 0, function () {
             var _a, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        if (!printToConsole) return [3 /*break*/, 2];
+                        if (!print) return [3 /*break*/, 2];
                         _b = (_a = console).log;
                         return [4 /*yield*/, this.colorize('orange', "> " + command)];
                     case 1:
@@ -196,43 +189,65 @@ var CorePlugin = /** @class */ (function () {
     };
     __decorate([
         billy_core_1.usesPlugins(billy_plugin_git_1.GitPlugin),
-        billy_core_1.Action('print in console')
-    ], CorePlugin.prototype, "print", null);
-    __decorate([
-        billy_core_1.Action('wait')
+        billy_core_1.Action({
+            addToHistory: true,
+            description: function (dur) { return "Waited for " + dur + "ms."; }
+        })
     ], CorePlugin.prototype, "wait", null);
     __decorate([
-        billy_core_1.Action('parseJSON')
+        billy_core_1.Action({
+            addToHistory: true,
+            description: function (path) { return "Parsed JSON file at path " + path; }
+        })
     ], CorePlugin.prototype, "parseJSON", null);
     __decorate([
-        billy_core_1.Action('writeJSON')
+        billy_core_1.Action({
+            addToHistory: true,
+            description: function (path) { return "Wrote JSON file at path " + path; }
+        })
     ], CorePlugin.prototype, "writeJSON", null);
     __decorate([
-        billy_core_1.Action('read file from disk')
-    ], CorePlugin.prototype, "readText", null);
+        billy_core_1.Action({
+            addToHistory: true,
+            description: function (path) { return "Read file at path " + path; }
+        })
+    ], CorePlugin.prototype, "readFile", null);
     __decorate([
-        billy_core_1.Action('write file to disk')
-    ], CorePlugin.prototype, "writeText", null);
+        billy_core_1.Action({
+            addToHistory: true,
+            description: function (path) { return "Wrote file at path " + path; }
+        })
+    ], CorePlugin.prototype, "writeFile", null);
     __decorate([
-        billy_core_1.Action('prompt')
+        billy_core_1.Action({
+            addToHistory: false,
+        })
     ], CorePlugin.prototype, "prompt", null);
     __decorate([
-        billy_core_1.Action('exists')
+        billy_core_1.Action({
+            addToHistory: false
+        })
     ], CorePlugin.prototype, "exists", null);
     __decorate([
-        billy_core_1.Action('exec')
+        billy_core_1.Action({
+            addToHistory: true,
+            description: function (command) { return "Executed command " + command + "."; }
+        })
     ], CorePlugin.prototype, "exec", null);
     __decorate([
-        billy_core_1.Action('billy')
+        billy_core_1.Action({ addToHistory: false })
     ], CorePlugin.prototype, "billy", null);
     __decorate([
-        billy_core_1.Action('colorize')
+        billy_core_1.Action({ addToHistory: false })
     ], CorePlugin.prototype, "colorize", null);
     __decorate([
-        billy_core_1.Action('bump')
+        billy_core_1.Action({
+            addToHistory: true,
+            description: function (version, message) { return "Bumped Version " + version + ": " + message; }
+        })
     ], CorePlugin.prototype, "bump", null);
     __decorate([
-        billy_core_1.Action('camelcase')
+        billy_core_1.Action({ addToHistory: false })
     ], CorePlugin.prototype, "camelcase", null);
     CorePlugin = __decorate([
         billy_core_1.Plugin('billy-plugin-core')

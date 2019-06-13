@@ -14,13 +14,10 @@ export interface CorePlugin extends GitPlugin { }
 export class CorePlugin {
     @usesPlugins(GitPlugin)
 
-
-    @Action('print in console')
-    print(...args: string[] | any[]) {
-        console.log(...args);
-    }
-
-    @Action('wait')
+    @Action({
+        addToHistory: true,
+        description: (dur: number) => `Waited for ${dur}ms.`
+    })
     async wait(dur: number): Promise<void> {
         console.log(`wait for ${dur}ms!`)
         return new Promise(resolve => {
@@ -31,7 +28,10 @@ export class CorePlugin {
         })
     }
 
-    @Action('parseJSON')
+    @Action({
+        addToHistory: true,
+        description: (path: string) => `Parsed JSON file at path ${path}`
+    })
     parseJSON(path: string) {
         if (existsSync(path)) {
             return JSON.parse(readFileSync(path, 'utf8'));
@@ -40,13 +40,19 @@ export class CorePlugin {
         }
     }
 
-    @Action('writeJSON')
+    @Action({
+        addToHistory: true,
+        description: (path: string) => `Wrote JSON file at path ${path}`
+    })
     writeJSON(path: string, content: any) {
         return writeFileSync(path, JSON.stringify(content, null, 4));
     }
 
-    @Action('read file from disk')
-    readText(path: string) {
+    @Action({
+        addToHistory: true,
+        description: (path: string) => `Read file at path ${path}`
+    })
+    readFile(path: string) {
         if (existsSync(path)) {
             return readFileSync(path, 'utf8');
         } else {
@@ -54,12 +60,17 @@ export class CorePlugin {
         }
     }
 
-    @Action('write file to disk')
-    writeText(path: string, content: any) {
+    @Action({
+        addToHistory: true,
+        description: (path: string) => `Wrote file at path ${path}`
+    })
+    writeFile(path: string, content: any) {
         return writeFileSync(path, content);
     }
 
-    @Action('prompt')
+    @Action({
+        addToHistory: false,
+    })
     async prompt(args: any[] | string) {
         if (typeof args === 'string') {
             return (await prompt([
@@ -73,14 +84,19 @@ export class CorePlugin {
         }
     }
 
-    @Action('exists')
+    @Action({
+        addToHistory: false
+    })
     exists(path: string): boolean {
         return existsSync(path);
     }
 
-    @Action('exec')
-    async exec(command: string, printToConsole = false) {
-        if (printToConsole) {
+    @Action({
+        addToHistory: true,
+        description: (command: string) => `Executed command ${command}.`
+    })
+    async exec(command: string, print = false) {
+        if (print) {
             console.log((await this.colorize('orange', `> ${command}`)));
             return new Promise((resolve, reject) => {
                 let error;
@@ -106,24 +122,27 @@ export class CorePlugin {
         }
     }
 
-    @Action('billy')
+    @Action({ addToHistory: false })
     billy(path = '.'): boolean {
         return existsSync(path + '/node_modules/@fivethree/billy-core');
     }
 
-    @Action('colorize')
+    @Action({ addToHistory: false })
     colorize(color: string, input: string) {
         return chalk.keyword(color)(input);
     }
 
-    @Action('bump')
+    @Action({
+        addToHistory: true,
+        description: (version: string, message: string) => `Bumped Version ${version}: ${message}`
+    })
     async bump(version: string, message: string, path?: string) {
         let m = `bump(${version})`;
         m = message ? m + ': ' + message : m;
         return path ? await exec(`git --git-dir=${path}/.git --work-tree=${path} add -A && git --git-dir=${path}/.git --work-tree=${path} commit -m "${m}"`) : await exec(`git add -A && git commit -m "${m}"`);
     }
 
-    @Action('camelcase')
+    @Action({ addToHistory: false })
     camelcase(s: string, pascalCase: boolean = false) {
         const camel = camelCase(s);
         if (pascalCase) {
