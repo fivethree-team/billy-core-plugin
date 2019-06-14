@@ -1,6 +1,6 @@
 {
     "name": "@fivethree/billy-plugin-core",
-    "version": "0.13.1",
+    "version": "0.14.0",
     "description": "core plugin",
     "repository": {
         "type": "git",
@@ -21,7 +21,7 @@
     "author": "garygrossgarten",
     "license": "MIT",
     "devDependencies": {
-        "@fivethree/billy-core": "0.13.1",
+        "@fivethree/billy-core": "0.14.0",
         "@types/node": "^10.12.18",
         "nodemon": "^1.18.9",
         "ts-node": "^7.0.1",
