@@ -48,11 +48,11 @@ var billy_core_1 = require("@fivethree/billy-core");
 var fs_1 = require("fs");
 var billy_plugin_git_1 = require("@fivethree/billy-plugin-git");
 var inquirer_1 = require("inquirer");
-var util = require('util');
+var util = require("util");
 var chalk_1 = __importDefault(require("chalk"));
-var exec = util.promisify(require('child_process').exec);
+var exec = util.promisify(require("child_process").exec);
 var child_process_1 = require("child_process");
-var camelCase = require('camelcase');
+var camelCase = require("camelcase");
 var CorePlugin = /** @class */ (function () {
     function CorePlugin() {
     }
@@ -62,7 +62,7 @@ var CorePlugin = /** @class */ (function () {
                 console.log("wait for " + dur + "ms!");
                 return [2 /*return*/, new Promise(function (resolve) {
                         setTimeout(function () {
-                            console.log('done waiting');
+                            console.log("done waiting");
                             resolve();
                         }, dur);
                     })];
@@ -71,7 +71,7 @@ var CorePlugin = /** @class */ (function () {
     };
     CorePlugin.prototype.parseJSON = function (path) {
         if (fs_1.existsSync(path)) {
-            return JSON.parse(fs_1.readFileSync(path, 'utf8'));
+            return JSON.parse(fs_1.readFileSync(path, "utf8"));
         }
         else {
             throw new Error("Couldn't find file at path: " + path + ".");
@@ -82,7 +82,7 @@ var CorePlugin = /** @class */ (function () {
     };
     CorePlugin.prototype.readFile = function (path) {
         if (fs_1.existsSync(path)) {
-            return fs_1.readFileSync(path, 'utf8');
+            return fs_1.readFileSync(path, "utf8");
         }
         else {
             throw new Error("Couldn't find file at path: " + path + ".");
@@ -96,11 +96,11 @@ var CorePlugin = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(typeof args === 'string')) return [3 /*break*/, 2];
+                        if (!(typeof args === "string")) return [3 /*break*/, 2];
                         return [4 /*yield*/, inquirer_1.prompt([
                                 {
-                                    name: 'answer',
-                                    message: args,
+                                    name: "answer",
+                                    message: args
                                 }
                             ])];
                     case 1: return [2 /*return*/, (_a.sent()).answer];
@@ -113,8 +113,9 @@ var CorePlugin = /** @class */ (function () {
     CorePlugin.prototype.exists = function (path) {
         return fs_1.existsSync(path);
     };
-    CorePlugin.prototype.exec = function (command, print) {
+    CorePlugin.prototype.exec = function (command, print, detached) {
         if (print === void 0) { print = false; }
+        if (detached === void 0) { detached = false; }
         return __awaiter(this, void 0, void 0, function () {
             var _a, _b;
             return __generator(this, function (_c) {
@@ -122,22 +123,25 @@ var CorePlugin = /** @class */ (function () {
                     case 0:
                         if (!print) return [3 /*break*/, 2];
                         _b = (_a = console).log;
-                        return [4 /*yield*/, this.colorize('orange', "> " + command)];
+                        return [4 /*yield*/, this.colorize("orange", "> " + command)];
                     case 1:
-                        _b.apply(_a, [(_c.sent())]);
+                        _b.apply(_a, [_c.sent()]);
                         return [2 /*return*/, new Promise(function (resolve, reject) {
                                 var error;
                                 var options = {
                                     shell: true,
-                                    stdio: [0, 1, 'pipe']
+                                    stdio: [0, 1, "pipe"]
                                 };
                                 var child = child_process_1.spawn(command, options);
-                                child.stderr.on('data', function (data) {
+                                child.stderr.on("data", function (data) {
                                     error = data.toString();
                                 });
-                                child.on('close', function (code) {
+                                if (detached) {
+                                    resolve(child);
+                                }
+                                child.on("close", function (code) {
                                     if (code !== 1) {
-                                        resolve({ code: code });
+                                        resolve(child);
                                     }
                                     else {
                                         reject(error);
@@ -151,8 +155,8 @@ var CorePlugin = /** @class */ (function () {
         });
     };
     CorePlugin.prototype.billy = function (path) {
-        if (path === void 0) { path = '.'; }
-        return fs_1.existsSync(path + '/node_modules/@fivethree/billy-core');
+        if (path === void 0) { path = "."; }
+        return fs_1.existsSync(path + "/node_modules/@fivethree/billy-core");
     };
     CorePlugin.prototype.colorize = function (color, input) {
         return chalk_1.default.keyword(color)(input);
@@ -164,7 +168,7 @@ var CorePlugin = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         m = "bump(" + version + ")";
-                        m = message ? m + ': ' + message : m;
+                        m = message ? m + ": " + message : m;
                         if (!path) return [3 /*break*/, 2];
                         return [4 /*yield*/, exec("git --git-dir=" + path + "/.git --work-tree=" + path + " add -A && git --git-dir=" + path + "/.git --work-tree=" + path + " commit -m \"" + m + "\"")];
                     case 1:
@@ -220,7 +224,7 @@ var CorePlugin = /** @class */ (function () {
     ], CorePlugin.prototype, "writeFile", null);
     __decorate([
         billy_core_1.Action({
-            addToHistory: false,
+            addToHistory: false
         })
     ], CorePlugin.prototype, "prompt", null);
     __decorate([
@@ -243,14 +247,16 @@ var CorePlugin = /** @class */ (function () {
     __decorate([
         billy_core_1.Action({
             addToHistory: true,
-            description: function (version, message) { return "Bumped Version " + version + ": " + message; }
+            description: function (version, message) {
+                return "Bumped Version " + version + ": " + message;
+            }
         })
     ], CorePlugin.prototype, "bump", null);
     __decorate([
         billy_core_1.Action({ addToHistory: false })
     ], CorePlugin.prototype, "camelcase", null);
     CorePlugin = __decorate([
-        billy_core_1.Plugin('billy-plugin-core')
+        billy_core_1.Plugin("billy-plugin-core")
     ], CorePlugin);
     return CorePlugin;
 }());

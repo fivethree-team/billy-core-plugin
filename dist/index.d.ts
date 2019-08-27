@@ -1,4 +1,6 @@
-import { GitPlugin } from '@fivethree/billy-plugin-git';
+/// <reference types="node" />
+import { GitPlugin } from "@fivethree/billy-plugin-git";
+import { ChildProcess } from "child_process";
 export interface CorePlugin extends GitPlugin {
 }
 export declare class CorePlugin {
@@ -9,7 +11,7 @@ export declare class CorePlugin {
     writeFile(path: string, content: any): void;
     prompt(args: any[] | string): Promise<any>;
     exists(path: string): boolean;
-    exec(command: string, print?: boolean): Promise<any>;
+    exec(command: string, print?: boolean, detached?: boolean): Promise<ChildProcess>;
     billy(path?: string): boolean;
     colorize(color: string, input: string): string;
     bump(version: string, message: string, path?: string): Promise<any>;
