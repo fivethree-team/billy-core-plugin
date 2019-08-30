@@ -1,7 +1,6 @@
 /// <reference types="node" />
-import { GitPlugin } from "@fivethree/billy-plugin-git";
 import { ChildProcess } from "child_process";
-export interface CorePlugin extends GitPlugin {
+export interface CorePlugin {
 }
 export declare class CorePlugin {
     wait(dur: number): Promise<void>;

@@ -47,7 +47,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var billy_core_1 = require("@fivethree/billy-core");
 var fs_1 = require("fs");
-var billy_plugin_git_1 = require("@fivethree/billy-plugin-git");
 var inquirer_1 = require("inquirer");
 var util = require("util");
 var chalk_1 = __importDefault(require("chalk"));
@@ -193,7 +192,6 @@ var CorePlugin = /** @class */ (function () {
         return camel;
     };
     __decorate([
-        billy_core_1.usesPlugins(billy_plugin_git_1.GitPlugin),
         billy_core_1.Action({
             addToHistory: true,
             description: function (dur) { return "Waited for " + dur + "ms."; }

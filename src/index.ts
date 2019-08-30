@@ -1,14 +1,5 @@
-import {
-  Plugin,
-  Action,
-  usesPlugins,
-  Command,
-  context,
-  Context,
-  App
-} from "@fivethree/billy-core";
+import { Plugin, Action, usesPlugins, App } from "@fivethree/billy-core";
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import { GitPlugin } from "@fivethree/billy-plugin-git";
 import { prompt } from "inquirer";
 const util = require("util");
 import chalk from "chalk";
@@ -16,11 +7,10 @@ const exec = util.promisify(require("child_process").exec);
 import { spawn, SpawnOptions, ChildProcess } from "child_process";
 const camelCase = require("camelcase");
 
-export interface CorePlugin extends GitPlugin {}
+export interface CorePlugin {}
 
 @Plugin("billy-plugin-core")
 export class CorePlugin {
-  @usesPlugins(GitPlugin)
   @Action({
     addToHistory: true,
     description: (dur: number) => `Waited for ${dur}ms.`
